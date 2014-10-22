@@ -1,0 +1,4 @@
+## YAML Template.
+name: EnderWarp
+main: com.mcdjuady.googlemail.enderwarp.EnderWarp
+version: 0.1
