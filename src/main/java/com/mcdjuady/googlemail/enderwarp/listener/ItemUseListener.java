@@ -49,9 +49,10 @@ public class ItemUseListener implements Listener {
                 int newAmmount = itemInHand.getAmount() - 1;
                 if (newAmmount > 0) {
                     //e.getPlayer().sendMessage("decrease and add");
-                    itemInHand.setAmount(newAmmount);
-                    e.getPlayer().getInventory().addItem(warpEye);
-                    e.getPlayer().updateInventory(); //TODO temp!
+                    if (e.getPlayer().getInventory().addItem(warpEye).isEmpty()) {
+                        itemInHand.setAmount(newAmmount);
+                        e.getPlayer().updateInventory(); //TODO temp!
+                    }
                 } else {
                     //e.getPlayer().sendMessage("remove");
                     e.getPlayer().getInventory().setItemInHand(null);
