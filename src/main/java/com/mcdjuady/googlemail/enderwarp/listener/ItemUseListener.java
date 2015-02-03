@@ -41,7 +41,7 @@ public class ItemUseListener implements Listener {
         //Bukkit.getLogger().info("IsCanceldStart: " + e.isCancelled());
         ItemStack itemInHand = e.getPlayer().getItemInHand();
         if (itemInHand != null && itemInHand.getType() == Material.EYE_OF_ENDER) {
-            if (e.getAction() == Action.RIGHT_CLICK_BLOCK && e.getClickedBlock().getType() == Material.BEACON) {
+            if (e.getAction() == Action.RIGHT_CLICK_BLOCK && e.getClickedBlock().getType() == Material.BEACON && !itemInHand.hasItemMeta()) {
                 Block clickedBlock = e.getClickedBlock();
                 //e.getPlayer().sendMessage("Create warp Eye");
                 ItemStack warpEye = Util.createWarpEye(clickedBlock);
@@ -112,82 +112,5 @@ public class ItemUseListener implements Listener {
             }
         }
         //Bukkit.getLogger().info("IsCanceldEnd: " + e.isCancelled());
-    }
-
-    @EventHandler
-    public void onCraftigPrepare(PrepareItemCraftEvent e) {
-        //some kind of stupid check because recipes aren't equal for whatever reason
-        //Bukkit.getLogger().info("PrepareCraft: " + items.length + "\n" + Arrays.deepToString(items));
-        if (Util.isCloningRecipe(e.getInventory(), Material.EYE_OF_ENDER)) {
-            //find all 3 eyes
-            int i = 0;
-            ItemStack[] items = new ItemStack[3];
-            for (ItemStack item : e.getInventory()) {
-                if (item != null && item.getType() == Material.EYE_OF_ENDER) {
-                    items[i++] = item;
-                }
-            }
-            if (Util.isWarpEye(items[1]) ^ Util.isWarpEye(items[2])) { //only do this if it's one warp eye
-                ItemStack warpEye = Util.isWarpEye(items[1]) ? items[1] : items[2];
-                ItemStack resultEye = warpEye.clone();
-                resultEye.setAmount(1);
-                e.getInventory().setResult(resultEye);
-            } else {
-                e.getInventory().setResult(null);
-            }
-        }
-    }
-
-    @EventHandler
-    public void onCraft(CraftItemEvent e) {
-        if (Util.isCloningRecipe(e.getInventory(), Material.EYE_OF_ENDER)) {
-            e.setResult(Event.Result.DENY); //cancel the crafting and do our manual version
-            e.setCancelled(true);
-            //find all 3 eyes
-            int i = 0;
-            ItemStack[] items = new ItemStack[3];
-            for (ItemStack item : e.getInventory()) {
-                if (item != null && item.getType() == Material.EYE_OF_ENDER) {
-                    items[i++] = item;
-                }
-            }
-            ItemStack warpEye = Util.isWarpEye(items[1]) ? items[1] : items[2];
-            ItemStack normalEye = Util.isWarpEye(items[1]) ? items[2] : items[1];
-            ItemStack resultEye = warpEye.clone();
-            resultEye.setAmount(1);
-            //since there is no option in CB to leave something behind in the crafting grid we have to do the crafting manualy
-            //special handling for shift-clicking
-            if (e.isShiftClick()) {
-                resultEye.setAmount(normalEye.getAmount());
-
-                HashMap<Integer, ItemStack> returnedItems = e.getView().getPlayer().getInventory().addItem(resultEye);
-                //deal with leftovers
-                if (!returnedItems.isEmpty()) {
-                    ItemStack leftover = returnedItems.get(0);
-                    Bukkit.getLogger().info(leftover.getAmount() + "");
-                    normalEye.setAmount(leftover.getAmount());
-                } else {
-                    e.getInventory().remove(normalEye);
-                }
-            } else if (e.getCursor().getType() == Material.AIR || (e.getCursor().isSimilar(warpEye) && e.getCursor().getAmount() < e.getCursor().getMaxStackSize())) {
-                int ammount = normalEye.getAmount();
-                if (e.getCursor().getType() == Material.AIR) {
-                    e.setCursor(resultEye); //TODO temp?
-                    ammount--;
-                    //warpEye.setAmount(warpEye.getAmount()+1);
-                    //e.setResult(Event.Result.ALLOW);
-                } else {
-                    e.getCursor().setAmount(e.getCursor().getAmount() + 1);
-                    ammount--;
-                }
-
-                if (ammount <= 0) {
-                    e.getInventory().remove(normalEye);
-                } else {
-                    normalEye.setAmount(ammount);
-                }
-                //TODO updateInv?
-            }
-        }
     }
 }
