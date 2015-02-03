@@ -5,8 +5,9 @@
  */
 package com.mcdjuady.googlemail.enderwarp;
 
-import com.googlemail.mcdjuady.craftutils.CloneValidator;
+import com.googlemail.mcdjuady.craftutils.validators.CloneValidator;
 import com.mcdjuady.googlemail.enderwarp.misc.Util;
+import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -16,15 +17,11 @@ import org.bukkit.inventory.ItemStack;
  */
 public class CloneEyeValidator extends CloneValidator{
     
-    public boolean validate(ItemStack[] matrix) {
-        if (matrix == null) {
-            return false;
-        }
+    @Override
+    public boolean validate(List<ItemStack> ingredients) {
         boolean valid = false;
-        for (ItemStack item : matrix) {
-            if (item != null && item.getType() != Material.AIR) {
-                valid = valid ^ Util.isWarpEye(item);
-            }
+        for (ItemStack item : ingredients) {
+            valid = valid ^ Util.isWarpEye(item);
         }
         return valid;
     }

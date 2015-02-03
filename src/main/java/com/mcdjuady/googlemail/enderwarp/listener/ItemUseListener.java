@@ -10,11 +10,14 @@ import com.mcdjuady.googlemail.enderwarp.misc.Util;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Effect;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
@@ -51,15 +54,13 @@ public class ItemUseListener implements Listener {
                     //e.getPlayer().sendMessage("decrease and add");
                     if (e.getPlayer().getInventory().addItem(warpEye).isEmpty()) {
                         itemInHand.setAmount(newAmmount);
-                        e.getPlayer().updateInventory(); //TODO temp!
                     }
                 } else {
                     //e.getPlayer().sendMessage("remove");
                     e.getPlayer().getInventory().setItemInHand(null);
-                    e.getPlayer().updateInventory(); //TODO temp!
                     e.getPlayer().getInventory().addItem(warpEye);
-                    e.getPlayer().updateInventory(); //TODO temp!
                 }
+                e.getPlayer().updateInventory();
                 e.setCancelled(true);
             } else if ((e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) && itemInHand.hasItemMeta() && itemInHand.getItemMeta().hasLore()) {
                 //e.getPlayer().sendMessage("Right click Air");
@@ -104,9 +105,18 @@ public class ItemUseListener implements Listener {
                     }
                 }
 
+                Random random = new Random();
+
+                e.getPlayer().getWorld().playEffect(e.getPlayer().getLocation(), Effect.PORTAL, null);
+                e.getPlayer().getWorld().playSound(e.getPlayer().getLocation(), Sound.ENDERMAN_TELEPORT, 1, random.nextFloat() + 0.5F);
+
                 //e.getPlayer().sendMessage("TP");
-                e.getPlayer().teleport(new Location(world, Integer.valueOf(coords[0]) + 0.5, Integer.valueOf(coords[1]), Integer.valueOf(coords[2]) + 0.5), PlayerTeleportEvent.TeleportCause.PLUGIN);
-                //TODO add effects
+                Location target = new Location(world, Integer.valueOf(coords[0]) + 0.5, Integer.valueOf(coords[1]), Integer.valueOf(coords[2]) + 0.5);
+                e.getPlayer().teleport(target, PlayerTeleportEvent.TeleportCause.PLUGIN);
+
+                target.add(0, 1, 0);
+                world.playEffect(target, Effect.PORTAL, null);
+                world.playSound(target, Sound.ENDERMAN_TELEPORT, 1, random.nextFloat() + 0.5F);
 
                 e.setCancelled(true);
             }

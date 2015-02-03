@@ -6,12 +6,11 @@
 package com.mcdjuady.googlemail.enderwarp;
 
 import com.googlemail.mcdjuady.craftutils.CraftUtils;
-import com.googlemail.mcdjuady.craftutils.ShapelessAdvancedRecipe;
+import com.googlemail.mcdjuady.craftutils.recipes.ShapelessAdvancedRecipe;
 import com.mcdjuady.googlemail.enderwarp.listener.ItemUseListener;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
