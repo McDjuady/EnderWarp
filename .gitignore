@@ -231,3 +231,5 @@ hs_err_pid*
 
 ##Maven
 /target/*
+*.class
+*.jar

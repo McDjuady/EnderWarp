@@ -7,11 +7,9 @@ package com.mcdjuady.googlemail.enderwarp.misc;
 
 import java.util.Arrays;
 import java.util.List;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -25,7 +23,7 @@ public class Util {
         char[] data = new char[str.length() * 2];
         for (int i = 0; i < data.length; i += 2) {
             data[i] = ChatColor.COLOR_CHAR;
-            data[i + 1] = str.charAt(i == 0 ? 0 : i / 2);
+            data[i + 1] = str.charAt(i / 2);
         }
         return new String(data);
     }
@@ -61,16 +59,6 @@ public class Util {
         String hiddenLore = Util.unhideString(meta.getLore().get(1));
         //e.getPlayer().sendMessage("HiddenLore:" + hiddenLore);
         return hiddenLore.matches("^\\[WarpEye\\](-)?(\\d)+:(-)?(\\d)+:(-)?(\\d)+:(\\w)+$");
-    }
-
-    public static boolean isCloningRecipe(Inventory inv, Material toClone) {
-        int count = 0;
-        for (ItemStack item : inv) {
-            if (item != null && item.getType() == toClone) {
-                count++;
-            }
-        }
-        return count == 3;
     }
 
 }

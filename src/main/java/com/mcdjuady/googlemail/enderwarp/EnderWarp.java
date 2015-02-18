@@ -5,11 +5,12 @@
  */
 package com.mcdjuady.googlemail.enderwarp;
 
+import com.googlemail.mcdjuady.craftutils.CraftUtils;
+import com.googlemail.mcdjuady.craftutils.recipes.ShapelessAdvancedRecipe;
 import com.mcdjuady.googlemail.enderwarp.listener.ItemUseListener;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -18,13 +19,13 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class EnderWarp extends JavaPlugin {
 
-    public static final ShapelessRecipe recipe = new ShapelessRecipe(new ItemStack(Material.EYE_OF_ENDER));
+    public static final ShapelessAdvancedRecipe recipe = new ShapelessAdvancedRecipe(new ItemStack(Material.EYE_OF_ENDER), new CloneEyeValidator());
 
     @Override
     public void onEnable() {
         Bukkit.getPluginManager().registerEvents(new ItemUseListener(), this);
         recipe.addIngredient(2, Material.EYE_OF_ENDER);
-        Bukkit.getServer().addRecipe(recipe);
+        CraftUtils.getRecipeManager().addRecipe(recipe);
     }
 
 }
