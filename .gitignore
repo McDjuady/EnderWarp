@@ -235,3 +235,7 @@ hs_err_pid*
 *.jar
 *.class
 *.jar
+target/EnderWarp-1.0-SNAPSHOT.jar
+target/EnderWarp-1.0-SNAPSHOT.jar
+*.jar
+*.class

@@ -21,10 +21,13 @@ public class EnderWarp extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        ShapelessAdvancedRecipe recipe = new ShapelessAdvancedRecipe(new ItemStack(Material.EYE_OF_ENDER), new CloneEyeValidator());
+        ShapelessAdvancedRecipe cloneRecipe = new ShapelessAdvancedRecipe(new ItemStack(Material.EYE_OF_ENDER), new CloneEyeValidator());
+        ShapelessAdvancedRecipe deWarpRecipe = new ShapelessAdvancedRecipe(new ItemStack(Material.EYE_OF_ENDER), new DeWarpEyeValidator());
         Bukkit.getPluginManager().registerEvents(new ItemUseListener(), this);
-        recipe.addIngredient(2, Material.EYE_OF_ENDER);
-        CraftUtils.getRecipeManager().addRecipe(recipe);
+        cloneRecipe.addIngredient(2, Material.EYE_OF_ENDER);
+        deWarpRecipe.addIngredient(Material.EYE_OF_ENDER);
+        CraftUtils.getRecipeManager().addRecipe(cloneRecipe);
+        CraftUtils.getRecipeManager().addRecipe(deWarpRecipe);
     }
 
 }
