@@ -233,3 +233,5 @@ hs_err_pid*
 /target/*
 *.class
 *.jar
+*.class
+*.jar

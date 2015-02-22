@@ -19,6 +19,9 @@ public class CloneEyeValidator extends CloneValidator{
     
     @Override
     public boolean validate(List<ItemStack> ingredients) {
+        if (ingredients.size() != 2) {
+            return false;
+        }
         boolean valid = false;
         for (ItemStack item : ingredients) {
             valid = valid ^ Util.isWarpEye(item);
