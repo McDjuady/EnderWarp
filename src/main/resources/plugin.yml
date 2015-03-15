@@ -9,4 +9,4 @@ permissions:
         default: true
     enderwarp.warp:
         description: Allows people to use WarpEyes
-        default: false
+        default: true
