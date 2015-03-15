@@ -1,5 +1,6 @@
 package com.mcdjuady.googlemail.enderwarp.listener;
 
+import com.mcdjuady.googlemail.enderwarp.EnderWarp;
 import com.mcdjuady.googlemail.enderwarp.misc.Util;
 import java.util.Random;
 import org.bukkit.Bukkit;
@@ -33,6 +34,12 @@ public class ItemUseListener implements Listener {
             if (e.getAction() == Action.RIGHT_CLICK_BLOCK && e.getClickedBlock().getType() == Material.BEACON && !itemInHand.hasItemMeta()) {
                 Block clickedBlock = e.getClickedBlock();
                 //e.getPlayer().sendMessage("Create warp Eye");
+                int level = Util.getBeaconLevel(clickedBlock.getWorld(), clickedBlock.getX(), clickedBlock.getY(), clickedBlock.getZ());
+                if (level < EnderWarp.getBeaconLevel()) {
+                    e.getPlayer().sendMessage(ChatColor.DARK_RED + "Can't link to a level " + level + " Beacon! The required level is " + EnderWarp.getBeaconLevel());
+                    e.setCancelled(true);
+                    return;
+                }
                 ItemStack warpEye = Util.createWarpEye(clickedBlock);
 
                 int newAmmount = itemInHand.getAmount() - 1;
@@ -72,15 +79,26 @@ public class ItemUseListener implements Listener {
                 }
 
                 Location beacon = new Location(world, Integer.valueOf(coords[0]), Integer.valueOf(coords[1]) - 1, Integer.valueOf(coords[2]));
-                //TODO widen checks?
-                if (world.getBlockAt(beacon).getType() != Material.BEACON || !world.getBlockAt(beacon.add(0, 1, 0)).isEmpty() || !world.getBlockAt(beacon.add(0, 1, 0)).isEmpty()) {
+                Block beaconBlock = world.getBlockAt(beacon);
+                final int beaconX = beacon.getBlockX();
+                final int beaconY = beacon.getBlockY();
+                final int beaconZ = beacon.getBlockZ();
+                int level = Util.getBeaconLevel(world, beaconX, beaconY, beaconZ);
+
+                if (level < EnderWarp.getBeaconLevel()) {
+                    e.getPlayer().sendMessage(ChatColor.DARK_RED + "The beacon you tried to warp to wasn't a high enough level! Please upgrade your beacon");
+                    e.setCancelled(true);
+                    return;
+                }
+
+                if (beaconBlock.getType() != Material.BEACON || !world.getBlockAt(beacon.add(0, 1, 0)).isEmpty() || !world.getBlockAt(beacon.add(0, 1, 0)).isEmpty()) {
                     e.getPlayer().sendMessage(ChatColor.DARK_RED + "The linked beacon was missing or obstructed");
                     e.setCancelled(true);
                     return;
                 }
 
                 //update inv before tp
-                if (e.getPlayer().getGameMode() != GameMode.CREATIVE && !itemInHand.containsEnchantment(Enchantment.DURABILITY)) {
+                if (e.getPlayer().getGameMode() != GameMode.CREATIVE && !itemInHand.containsEnchantment(Enchantment.DURABILITY) && EnderWarp.consumeOnThrow()) {
                     int newAmmount = itemInHand.getAmount() - 1;
                     if (newAmmount > 0) {
                         //e.getPlayer().sendMessage("decrease");

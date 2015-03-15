@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -18,6 +19,30 @@ import org.bukkit.inventory.meta.ItemMeta;
  * @author McDjuady
  */
 public class Util {
+
+    public static int getBeaconLevel(World world, int beaconX, int beaconY, int beaconZ) {
+        boolean valid = true;
+        int level;
+        for (level = 0; level < 4; level++) {
+            int y = level + 1;
+            for (int x = -y; x < y; x++) {
+                for (int z = -y; z < y; z++) {
+                    Block block = world.getBlockAt(beaconX + x, beaconY - y, beaconZ + z);
+                    if (block.getType() != Material.IRON_BLOCK && block.getType() != Material.GOLD_BLOCK && block.getType() != Material.EMERALD_BLOCK && block.getType() != Material.DIAMOND_BLOCK) {
+                        valid = false;
+                        break;
+                    }
+                }
+                if (!valid) {
+                    break;
+                }
+            }
+            if (!valid) {
+                break;
+            }
+        }
+        return level;
+    }
 
     public static String hideString(String str) {
         char[] data = new char[str.length() * 2];
