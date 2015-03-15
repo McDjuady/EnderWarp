@@ -3,3 +3,10 @@ name: EnderWarp
 main: com.mcdjuady.googlemail.enderwarp.EnderWarp
 version: 0.1
 depend: [CraftUtils]
+permissions:
+    enderwarp.create:
+        description: Allows people to create WarpEyes
+        default: true
+    enderwarp.warp:
+        description: Allows people to use WarpEyes
+        default: false

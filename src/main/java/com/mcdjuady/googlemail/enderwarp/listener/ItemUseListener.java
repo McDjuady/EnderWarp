@@ -32,6 +32,11 @@ public class ItemUseListener implements Listener {
         ItemStack itemInHand = e.getPlayer().getItemInHand();
         if (itemInHand != null && itemInHand.getType() == Material.EYE_OF_ENDER) {
             if (e.getAction() == Action.RIGHT_CLICK_BLOCK && e.getClickedBlock().getType() == Material.BEACON && !itemInHand.hasItemMeta()) {
+                if (!e.getPlayer().hasPermission("enderwarp.create")) {
+                    e.getPlayer().sendMessage(ChatColor.DARK_RED + "You don't have the permissions to create a WarpEye!");
+                    e.setCancelled(true);
+                    return;
+                }
                 Block clickedBlock = e.getClickedBlock();
                 //e.getPlayer().sendMessage("Create warp Eye");
                 int level = Util.getBeaconLevel(clickedBlock.getWorld(), clickedBlock.getX(), clickedBlock.getY(), clickedBlock.getZ());
@@ -57,6 +62,11 @@ public class ItemUseListener implements Listener {
                 e.setCancelled(true);
             } else if ((e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) && itemInHand.hasItemMeta() && itemInHand.getItemMeta().hasLore()) {
                 //e.getPlayer().sendMessage("Right click Air");
+                if (!e.getPlayer().hasPermission("enderwarp.warp")) {
+                    e.getPlayer().sendMessage(ChatColor.DARK_RED + "You don't have the permissions to use a WarpEye!");
+                    e.setCancelled(true);
+                    return;
+                }
                 if (!Util.isWarpEye(itemInHand)) { //TODO ignore?
                     e.getPlayer().sendMessage(ChatColor.DARK_RED.toString() + "The eye you used was not a warp eye! Please contact your server admin");
                     e.setCancelled(true);
